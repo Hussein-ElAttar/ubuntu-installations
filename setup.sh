@@ -52,4 +52,4 @@ while read choice; do
     ${actions["$choice"]}
 done < $temp_file
 
-rm ./$temp_file
+rm -f ./$temp_file
