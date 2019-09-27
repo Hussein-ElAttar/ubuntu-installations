@@ -10,11 +10,12 @@ add_my_sql_root_password () {
     read -s newpassword </dev/tty;
     sudo mysql -u root -e "
         DROP USER 'root'@'localhost';
-        CREATE USER 'root'@'localhost' IDENTIFIED BY '123456';
+        CREATE USER 'root'@'localhost' IDENTIFIED BY '${newpassword}';
         GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
         FLUSH PRIVILEGES;
     ";
 }
+
 install_my_sql () {
     apt update;
     apt install -y mysql-server mysql-client;
@@ -24,23 +25,26 @@ install_my_sql () {
 
 install_php () {
     apt update;
-    apt install -y php7.2-bcmath php7.2-curl php7.2-gd php7.2-json php7.2-opcache php7.2-recode php7.2-tidy php7.2-bz2 php7.2-dba php7.2-gmp php7.2-ldap php7.2-pgsql php7.2-snmp php7.2-xml php7.2-mbstring php7.2-soap php7.2-cli php7.2-mysql php7.2-common php7.2-intl php7.2-zip;
+    apt install -y php7.2-bcmath php7.2-curl php7.2-gd php7.2-json php7.2-opcache php7.2-recode
+    apt install -y php7.2-tidy php7.2-bz2 php7.2-dba php7.2-gmp php7.2-ldap php7.2-pgsql php7.2-snmp 
+    apt install -y php7.2-xml php7.2-mbstring php7.2-soap php7.2-cli php7.2-mysql php7.2-common php7.2-intl php7.2-zip;
+    apt install -y php7.2 php7.2-cgi libapache2-mod-php php7.2-common php7.2-pear php7.2-mbstring php7.2-gettext;
 }
 
 install_apache () {
     apt install -y apache2 </dev/tty;
-    apt-get install -y php php-cgi libapache2-mod-php php-common php-pear php-mbstring php-gettext;
     a2enconf php7.2-cgi;
     service apache2 reload;
 }
 
-install_php_my_admin () {
+install_phpmyadmin () {
     apt-get install -y phpmyadmin;
-    echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf;
+    apache2_conf_file='/etc/apache2/apache2.conf';
+    added_conf='Include /etc/phpmyadmin/apache.conf';
+    grep -qF -- "$added_conf" "$apache2_conf_file" || echo "$added_conf" >> "$apache2_conf_file";
     service apache2 restart;
     # FIX: count(): Parameter must be an array or an object that implements Countable;
-    sed -i s/"')))"/"'))"/g /usr/share/phpmyadmin/libraries/sql.lib.php;
-    sed -i s/"] == 1)"/"]) == 1)"/g /usr/share/phpmyadmin/libraries/sql.lib.php;
+    sudo sed -i "s/|\s*\((count(\$analyzed_sql_results\['select_expr'\]\)/| (\1)/g" /usr/share/phpmyadmin/libraries/sql.lib.php;
 }
 
 install_mongo () {
@@ -55,12 +59,14 @@ install_mongo () {
     echo "mongodb-org-tools hold" | sudo dpkg --set-selections;
 }
 
-
 install_mongo_php_extension () {
     apt-get install libcurl4-openssl-dev pkg-config libssl-dev;
     pecl install mongodb;
-    sed -i '2i\extension=mongodb.so\' /etc/php/7.2/cli/php.ini;
+    file='/etc/php/7.2/cli/php.ini';
+    line='extension=mongodb.so';
+    if ! grep -qF "$line" $file ; then sed -i "2i$line" $file; fi
 }
+
 install_composer () {
     apt update;
     apt install -y wget php-cli php-zip unzip curl;
@@ -104,9 +110,4 @@ install_vscode () {
 install_genome_tweaks () {
     apt update;
     apt install -y gnome-tweak-tool;
-}
-
-install_paper_theme () {
-    add-apt-repository ppa:snwh/ppa;
-    apt-get install -y paper-icon-theme;
 }
