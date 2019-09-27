@@ -16,7 +16,7 @@ menu[0]="Git"
 menu[1]="PHP 7.2"
 menu[2]="NodeJs 10.16"
 menu[3]="MySQL"
-menu[4]="Mongo"
+menu[4]="MongoDB"
 menu[5]="Apache"
 menu[6]="PhpMyAdmin"
 menu[7]="Composer"
@@ -46,7 +46,7 @@ for Option in "${menu[@]}"; do
     whiptailArray+=("$Option" " " off)
 done
 
-whiptail --title "Installations" --checklist --separate-output "Choose:" 20 78 15 "${whiptailArray[@]} | sort -n" 2>$temp_file
+whiptail --title "Installations" --checklist --separate-output "Press Space to select -- Enter to start -- Escape to cancel" 20 78 ${#menu[@]} "${whiptailArray[@]}" 2>$temp_file
 
 while read choice; do
     ${actions["$choice"]}
