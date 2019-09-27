@@ -6,11 +6,9 @@ install_git () {
 }
 
 add_my_sql_root_password () {
-    echo -n Please enter your current mysql root password:;
-    read -s password;
-    echo -n Please enter your new mysql root password:;
+    echo -n Please enter your new mysql root password;
     read -s newpassword;
-    mysql -u root -p${password} -e "
+    sudo mysql -u root -e "
         DROP USER 'root'@'localhost';
         CREATE USER 'root'@'localhost' IDENTIFIED BY '${newpassword}';
         GRANT ALL PRIVILEGES ON *.* TO 'root'@'localhost' WITH GRANT OPTION;
@@ -20,6 +18,7 @@ add_my_sql_root_password () {
 install_my_sql () {
     apt update;
     apt install -y mysql-server mysql-client;
+    service mysql start
     add_my_sql_root_password;
 }
 
@@ -32,7 +31,7 @@ install_apache_with_php_my_admin () {
     apt install -y apache2;
     apt-get install -y php php-cgi libapache2-mod-php php-common php-pear php-mbstring;
     a2enconf php7.2-cgi;
-    systemctl reload apache2.service;
+    service apache2 reload;
     apt-get install -y phpmyadmin php-gettext;
     echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf;
     /etc/init.d/apache2 restart;
