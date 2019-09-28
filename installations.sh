@@ -25,20 +25,22 @@ install_my_sql () {
 
 install_php () {
     apt update;
-    apt install -y php7.2-bcmath php7.2-curl php7.2-gd php7.2-json php7.2-opcache php7.2-recode
-    apt install -y php7.2-tidy php7.2-bz2 php7.2-dba php7.2-gmp php7.2-ldap php7.2-pgsql php7.2-snmp 
-    apt install -y php7.2-xml php7.2-mbstring php7.2-soap php7.2-cli php7.2-mysql php7.2-common php7.2-intl php7.2-zip;
-    apt install -y php7.2 php7.2-cgi libapache2-mod-php php7.2-common php7.2-pear php7.2-mbstring php7.2-gettext;
+    apt install -y php7.2-bcmath php7.2-curl php7.2-gd php7.2-json php7.2-opcache php7.2-recode php7.2-tidy
+    apt install -y php7.2-bz2 php7.2-dba php7.2-gmp php7.2-ldap php7.2-pgsql php7.2-snmp php7.2-xml 
+    apt install -y php7.2-mbstring php7.2-soap php7.2-cli php7.2-mysql php7.2-common php7.2-intl php7.2-zip;
 }
 
 install_apache () {
-    apt install -y apache2 </dev/tty;
+    apt-get update;
+    apt install -y apache2;
+    apt-get install -y php php-cgi libapache2-mod-php php-common php-pear php-mbstring php-gettext;
     a2enconf php7.2-cgi;
-    service apache2 reload;
+    service apache2 restart;
 }
 
 install_phpmyadmin () {
-    apt-get install -y phpmyadmin;
+    apt-get update;
+    apt-get install -y phpmyadmin </dev/tty ;
     apache2_conf_file='/etc/apache2/apache2.conf';
     added_conf='Include /etc/phpmyadmin/apache.conf';
     grep -qF -- "$added_conf" "$apache2_conf_file" || echo "$added_conf" >> "$apache2_conf_file";
@@ -60,6 +62,7 @@ install_mongo () {
 }
 
 install_mongo_php_extension () {
+    apt update;
     apt-get install libcurl4-openssl-dev pkg-config libssl-dev;
     pecl install mongodb;
     file='/etc/php/7.2/cli/php.ini';
