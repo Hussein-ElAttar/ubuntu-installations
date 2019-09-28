@@ -20,11 +20,10 @@ menu[4]="MongoDB"
 menu[5]="Apache"
 menu[6]="PhpMyAdmin"
 menu[7]="Composer"
-menu[8]="Laravel Composer"
+menu[8]="Laravel"
 menu[9]="Mongo PHP Extension"
 menu[10]="VScode"
-menu[11]="Oh My Zsh"
-menu[12]="Gnome tweaks"
+menu[11]="Zsh"
 
 # Actions
 declare -A actions
@@ -39,8 +38,7 @@ actions["${menu[7]}"]="install_composer"
 actions["${menu[8]}"]="install_laravel"
 actions["${menu[9]}"]="install_mongo_php_extension"
 actions["${menu[10]}"]="install_vscode"
-actions["${menu[11]}"]="install_oh_my_zsh"
-actions["${menu[12]}"]="install_genome_tweaks"
+actions["${menu[11]}"]="install_zsh"
 
 for Option in "${menu[@]}"; do
     whiptailArray+=("$Option" " " off)
