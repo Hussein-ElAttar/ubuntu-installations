@@ -80,7 +80,7 @@ install_composer () {
 }
 
 install_laravel () {
-    composer global require "laravel/installer";
+    su - $SUDO_USER -c "composer global require 'laravel/installer'";
 }
 
 install_zsh () {
