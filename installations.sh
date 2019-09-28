@@ -25,8 +25,8 @@ install_my_sql () {
 
 install_php () {
     apt update;
-    apt install -y php7.2-bcmath php7.2-curl php7.2-gd php7.2-json php7.2-opcache php7.2-recode php7.2-tidy
-    apt install -y php7.2-bz2 php7.2-dba php7.2-gmp php7.2-ldap php7.2-pgsql php7.2-snmp php7.2-xml 
+    apt install -y php7.2-bcmath php7.2-curl php7.2-gd php7.2-json php7.2-opcache php7.2-recode php7.2-tidy;
+    apt install -y php7.2-bz2 php7.2-dba php7.2-gmp php7.2-ldap php7.2-pgsql php7.2-snmp php7.2-xml php7.2-dev;
     apt install -y php7.2-mbstring php7.2-soap php7.2-cli php7.2-mysql php7.2-common php7.2-intl php7.2-zip;
 }
 
@@ -63,7 +63,9 @@ install_mongo () {
 
 install_mongo_php_extension () {
     apt update;
-    apt-get install libcurl4-openssl-dev pkg-config libssl-dev;
+    apt install libcurl4-openssl-dev pkg-config libssl-dev;
+    apt install -y php7.2-dev;
+    pecl channel-update pecl.php.net;
     pecl install mongodb;
     file='/etc/php/7.2/cli/php.ini';
     line='extension=mongodb.so';
@@ -81,7 +83,7 @@ install_laravel () {
     composer global require "laravel/installer";
 }
 
-install_oh_my_zsh () {
+install_zsh () {
     apt update;
     apt install -y zsh;
     chsh -s /bin/zsh;
@@ -108,9 +110,4 @@ install_vscode () {
     add-apt-repository "deb [arch=amd64] https://packages.microsoft.com/repos/vscode stable main";
     apt update;
     apt install -y code;
-}
-
-install_genome_tweaks () {
-    apt update;
-    apt install -y gnome-tweak-tool;
 }
