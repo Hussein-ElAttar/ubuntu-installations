@@ -118,8 +118,8 @@ install_docker() {
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -;
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable";
     apt update;
-    apt install docker-ce;
-    read -p "Do you want to run docker without sudo (y/n) ? " choice
+    apt install -y docker-ce;
+    read -p "Do you want to run docker without sudo (y/n) ? " choice </dev/tty
     case "$choice" in 
     y|Y ) usermod -aG docker ${USER};;
     n|N ) echo "You've successfully installed docker";;
