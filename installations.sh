@@ -1,12 +1,16 @@
 #!/bin/bash
 
+my_dir="$(dirname "$0")"
+
+source $my_dir/helpers.sh
+
 install_git () {
     apt update;
     apt install -y git;
 }
 
 add_my_sql_root_password () {
-    echo -n Please enter your new mysql root password\;
+    print_warning "Please enter your new mysql root password";
     read -s newpassword </dev/tty;
     sudo mysql -u root -e "
         DROP USER 'root'@'localhost';
@@ -114,15 +118,18 @@ install_vscode () {
 
 install_docker() {
     apt update;
-    apt install apt-transport-https ca-certificates curl software-properties-common;
+    apt install -y apt-transport-https ca-certificates curl software-properties-common;
     curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -;
     add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu bionic stable";
     apt update;
     apt install -y docker-ce;
-    read -p "Do you want to run docker without sudo (y/n) ? " choice </dev/tty
-    case "$choice" in 
-    y|Y ) usermod -aG docker ${USER};;
-    n|N ) echo "You've successfully installed docker";;
-    * ) echo "invalid argument";;
+    read -p "Do you want to run docker without sudo (y/n) ? " choice </dev/tty;
+    case "$choice" in
+        y|Y )
+            usermod -aG docker ${USER};
+            print_success "Current user was added to docker group";;
+        n|N )
+            print_danger "Current user was not added to docker group";;
+        * ) print_danger "invalid argument";;
     esac
 }
