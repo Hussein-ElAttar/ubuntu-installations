@@ -5,6 +5,7 @@ if [[ $(id -u) -ne 0 ]] ; then echo "Please run as root" ; exit 1 ; fi
 my_dir="$(dirname "$0")"
 
 source $my_dir/installations.sh
+source $my_dir/helpers.sh
 
 temp_file=a984j1a324lk852.tmp
 
@@ -48,8 +49,12 @@ done
 
 whiptail --title "Installations" --checklist --separate-output "Press Space to select -- Enter to start -- Escape to cancel" 20 78 ${#menu[@]} "${whiptailArray[@]}" 2>$temp_file
 
-while read choice; do
-    ${actions["$choice"]}
+while read menu_choice; do
+    ${actions["$menu_choice"]};
+done < $temp_file
+
+while read menu_choice; do
+    print_success "Successfully installed $menu_choice"
 done < $temp_file
 
 rm -f ./$temp_file
