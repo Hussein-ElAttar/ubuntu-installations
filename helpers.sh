@@ -1,19 +1,23 @@
         ## Helper Methods ##
 #####################################
-print_success () {
-    green=`tput setaf 2`;
+print () {
     reset=`tput sgr0`;
-    echo -e "${green} $1 ${reset}";
+    for msg in "$@"; do
+        echo -e "${color} $msg ${reset}";
+    done
+}
+
+print_success () {
+    color=`tput setaf 2`; # green
+    print $color "$@"
 }
 
 print_warning () {
-    yellow=`tput setaf 3`;
-    reset=`tput sgr0`;
-    echo -e "${yellow} $1 ${reset}";
+    color=`tput setaf 3`; # yellow
+    print $color "$@"
 }
 
 print_danger () {
-    red=`tput setaf 1`;
-    reset=`tput sgr0`;
-    echo -e "${red} $1 ${reset}";
+    color=`tput setaf 1`; # red
+    print $color "$@"
 }
