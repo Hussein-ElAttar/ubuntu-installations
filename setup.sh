@@ -51,10 +51,14 @@ whiptail --title "Installations" --checklist --separate-output "Press Space to s
 
 while read menu_choice; do
     ${actions["$menu_choice"]};
+    if [ $? -eq 0 ]; then
+        installed+=("Successfully installed $menu_choice")
+    else
+        not_installed+=("Could not install $menu_choice")
+    fi
 done < $temp_file
 
-while read menu_choice; do
-    print_success "Successfully installed $menu_choice"
-done < $temp_file
+print_success "${installed[@]}"
+print_danger "${not_installed[@]}"
 
 rm -f ./$temp_file
