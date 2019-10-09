@@ -10,8 +10,14 @@ install_git () {
 }
 
 add_my_sql_root_password () {
-    print_warning "Please enter your new mysql root password";
-    read -s newpassword </dev/tty;
+    while true; do
+        print_warning "Please enter your new mysql root password";
+        read -s newpassword </dev/tty;
+        print_warning "Please re-enter the password to confirm";
+        read -s confirm_newpassword </dev/tty;
+        [ "$newpassword" = "$confirm_newpassword" ] && break;
+        print_danger "Passwords don't match";
+    done
     sudo mysql -u root -e "
         DROP USER 'root'@'localhost';
         CREATE USER 'root'@'localhost' IDENTIFIED BY '${newpassword}';
