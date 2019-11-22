@@ -49,6 +49,7 @@ install_apache () {
 }
 
 install_phpmyadmin () {
+    add-apt-repository ppa:phpmyadmin/ppa;
     apt-get update;
     apt-get install -y phpmyadmin </dev/tty ;
     apache2_conf_file='/etc/apache2/apache2.conf';
