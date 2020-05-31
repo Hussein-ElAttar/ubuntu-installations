@@ -16,7 +16,7 @@ rm -f ./$temp_file
 menu[0]="Git"
 menu[1]="PHP 7.2"
 menu[2]="NodeJs 10.16"
-menu[3]="MySQL"
+menu[3]="MySQL 5.7"
 menu[4]="MongoDB"
 menu[5]="Apache"
 menu[6]="PhpMyAdmin"
