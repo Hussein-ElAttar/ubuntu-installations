@@ -54,7 +54,7 @@ while read menu_choice; do
     if [ $? -eq 0 ]; then
         installed+=("Successfully installed $menu_choice")
     else
-        not_installed+=("Could not install $menu_choice")
+        not_installed+=("Something went wrong in $menu_choice installation")
     fi
 done < $temp_file
 
